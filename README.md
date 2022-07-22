@@ -46,6 +46,9 @@ Create some content at filename = `kube-xray-daemon/aws-auth-secrets.yaml`
 
 Even though your AWS credentials already look like BASE64 they need to be BASE64'd again for K8S.
 
+A sample file is provided (as `kube-xray-daemon/aws-auth-secrets.yaml.template`) - be sure to
+rename it to a yaml file.
+
 Content :
 
 ```yaml
