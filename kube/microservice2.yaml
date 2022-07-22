@@ -1,0 +1,71 @@
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: microservice2
+  labels:
+    run: microservice2
+spec:
+  ports:
+    - name: http
+      port: 80
+      protocol: TCP
+  selector:
+    run: microservice2
+  type: NodePort
+
+---
+
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: microservice2
+spec:
+  serviceName: microservice2
+  selector:
+    matchLabels:
+      run: microservice2
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        run: microservice2
+    spec:
+      containers:
+        - name: microservice2
+          image: microservice2:0.0.1-SNAPSHOT
+          env:
+            - name: SPRING_PROFILES_ACTIVE
+              value: prod
+            - name: IS_STATEFUL_SET
+              value: "1"
+            - name: API_CNAME
+              value: microservice2.default
+            - name: AWS_XRAY_DAEMON_ADDRESS
+              value: xray-service.default:2000
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 80
+
+---
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ingress-microservice2
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /microservice2/$2
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: api.example.com
+      http:
+        paths:
+          - path: /microservice2(/|$)(.*)
+            pathType: Prefix
+            backend:
+              service:
+                name: microservice2
+                port:
+                  number: 80

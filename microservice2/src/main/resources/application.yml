@@ -1,0 +1,24 @@
+server:
+  servlet:
+    context-path: /microservice2
+  port: 8081
+
+---
+
+spring:
+  config:
+    activate:
+      on-profile: dev
+
+server:
+  port: 80
+
+---
+
+spring:
+  config:
+    activate:
+      on-profile: prod
+
+server:
+  port: 80

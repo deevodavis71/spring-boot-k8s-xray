@@ -1,0 +1,39 @@
+spring:
+  profiles:
+    include:
+      endpoints
+
+sjd:
+  greeting: Greetings
+  env-name: steve
+
+server:
+  servlet:
+    context-path: /microservice1
+  port: 8080
+
+---
+
+spring:
+  config:
+    activate:
+      on-profile: dev
+
+sjd:
+  env-name: steve-dev
+
+server:
+  port: 80
+
+---
+
+spring:
+  config:
+    activate:
+      on-profile: prod
+
+sjd:
+  env-name: steve-prod
+
+server:
+  port: 80

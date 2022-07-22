@@ -1,0 +1,25 @@
+service-endpoints:
+  microservice1: http://localhost:8080
+  microservice2: http://localhost:8081
+
+---
+
+spring:
+  config:
+    activate:
+      on-profile: dev
+
+service-endpoints:
+  microservice1: http://microservice1.default
+  microservice2: http://microservice2.default
+
+---
+
+spring:
+  config:
+    activate:
+      on-profile: prod
+
+service-endpoints:
+  microservice1: http://microservice1.default
+  microservice2: http://microservice2.default
