@@ -12,6 +12,12 @@ server:
     context-path: /microservice1
   port: 8080
 
+com:
+  amazonaws:
+    xray:
+      metrics:
+        daemonAddress: localhost:2000
+
 ---
 
 spring:
