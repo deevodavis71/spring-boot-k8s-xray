@@ -75,6 +75,8 @@ spec:
                 secretKeyRef:
                   name: aws-secrets
                   key: aws_secret_access_key
+            - name: AWS_REGION
+              value: "eu-west-2"
 ---
 # Configuration for AWS X-Ray daemon
 apiVersion: v1
