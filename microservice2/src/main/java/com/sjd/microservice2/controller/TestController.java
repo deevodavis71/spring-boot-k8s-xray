@@ -1,6 +1,5 @@
 package com.sjd.microservice2.controller;
 
-import com.amazonaws.xray.spring.aop.XRayEnabled;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import lombok.extern.slf4j.Slf4j;
@@ -13,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 @RestController
 @RequestMapping("/test")
-@XRayEnabled
+// @XRayEnabled
 public class TestController {
 
   @GetMapping

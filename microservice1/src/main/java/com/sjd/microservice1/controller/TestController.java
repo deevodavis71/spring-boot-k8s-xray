@@ -1,6 +1,5 @@
 package com.sjd.microservice1.controller;
 
-import com.amazonaws.xray.spring.aop.XRayEnabled;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -15,7 +14,7 @@ import org.springframework.web.client.RestTemplate;
 @Slf4j
 @RestController
 @RequestMapping("/test")
-@XRayEnabled
+// @XRayEnabled
 public class TestController {
 
   @Value("${sjd.greeting:Hey}")
