@@ -15,22 +15,21 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class TracingFilter {
 
-  static {
-    AWSXRayRecorderBuilder builder =
-        AWSXRayRecorderBuilder.standard()
-            .withPlugin(new EC2Plugin())
-            .withPlugin(new EKSPlugin())
-            .withSegmentListener(new MetricsSegmentListener())
-            .withSegmentListener(new Log4JSegmentListener("microservice1"));
-
-    AWSXRay.setGlobalRecorder(builder.build());
-  }
-
   @Value("${spring.application.name}")
   public String appName;
 
   @Bean
   public Filter xrayFilter() {
+
+    AWSXRayRecorderBuilder builder =
+        AWSXRayRecorderBuilder.standard()
+            .withPlugin(new EC2Plugin())
+            .withPlugin(new EKSPlugin())
+            .withSegmentListener(new MetricsSegmentListener())
+            .withSegmentListener(new Log4JSegmentListener(appName));
+
+    AWSXRay.setGlobalRecorder(builder.build());
+
     return new AWSXRayServletFilter(appName);
   }
 }

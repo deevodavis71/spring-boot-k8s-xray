@@ -9,8 +9,6 @@ import org.springframework.stereotype.Component;
 @Component
 public class XRayInspector extends BaseAbstractXRayInterceptor {
   @Override
-  // @Pointcut("@within(com.amazonaws.xray.spring.aop.XRayEnabled) && bean(*Controller)")
-  // @Pointcut("@within(com.amazonaws.xray.spring.aop.XRayEnabled) && bean(*)")
   @Pointcut("within(com.sjd..*) && bean(*Controller)")
   public void xrayEnabledClasses() {
     // Pointcut
