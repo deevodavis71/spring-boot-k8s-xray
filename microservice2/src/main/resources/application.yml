@@ -1,3 +1,7 @@
+spring:
+  application:
+    name: microservice2
+
 server:
   servlet:
     context-path: /microservice2

@@ -8,6 +8,7 @@ import com.amazonaws.xray.metrics.MetricsSegmentListener;
 import com.amazonaws.xray.plugins.EC2Plugin;
 import com.amazonaws.xray.plugins.EKSPlugin;
 import javax.servlet.Filter;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -25,8 +26,11 @@ public class TracingFilter {
     AWSXRay.setGlobalRecorder(builder.build());
   }
 
+  @Value("${spring.application.name}")
+  public String appName;
+
   @Bean
   public Filter xrayFilter() {
-    return new AWSXRayServletFilter("microservice2");
+    return new AWSXRayServletFilter(appName);
   }
 }

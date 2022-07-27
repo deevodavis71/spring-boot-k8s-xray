@@ -1,4 +1,6 @@
 spring:
+  application:
+    name: microservice1
   profiles:
     include:
       endpoints
