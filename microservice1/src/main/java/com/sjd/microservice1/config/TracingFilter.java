@@ -6,6 +6,7 @@ import com.amazonaws.xray.javax.servlet.AWSXRayServletFilter;
 import com.amazonaws.xray.log4j.Log4JSegmentListener;
 import com.amazonaws.xray.metrics.MetricsSegmentListener;
 import com.amazonaws.xray.plugins.EC2Plugin;
+import com.amazonaws.xray.plugins.EKSPlugin;
 import javax.servlet.Filter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,6 +18,7 @@ public class TracingFilter {
     AWSXRayRecorderBuilder builder =
         AWSXRayRecorderBuilder.standard()
             .withPlugin(new EC2Plugin())
+            .withPlugin(new EKSPlugin())
             .withSegmentListener(new MetricsSegmentListener())
             .withSegmentListener(new Log4JSegmentListener("microservice1"));
 
