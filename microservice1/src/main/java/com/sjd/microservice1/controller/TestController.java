@@ -1,5 +1,7 @@
 package com.sjd.microservice1.controller;
 
+import io.micrometer.core.instrument.Counter;
+import io.micrometer.core.instrument.MeterRegistry;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -15,55 +17,75 @@ import org.springframework.web.client.RestTemplate;
 @RestController
 @RequestMapping("/test")
 // @XRayEnabled
-public class TestController {
+public class TestController
+{
 
-  @Value("${sjd.greeting:Hey}")
-  private String greeting;
+    @Value("${sjd.greeting:Hey}")
+    private String greeting;
 
-  @Value("${sjd.env-name:no-value}")
-  private String envName;
+    @Value("${sjd.env-name:no-value}")
+    private String envName;
 
-  @Value("${service-endpoints.microservice2}")
-  private String microservice2Endpoint;
+    @Value("${service-endpoints.microservice2}")
+    private String microservice2Endpoint;
 
-  @Autowired private RestTemplate restTemplate;
+    @Autowired
+    private RestTemplate restTemplate;
 
-  @GetMapping
-  public ResponseEntity<String> test() {
+    Counter visitCounter;
 
-    String messageFromMicroservice2 = null;
-
-    log.debug("Testing out Microservice1");
-
-    try {
-
-      log.debug("Connecting to : " + messageFromMicroservice2);
-
-      messageFromMicroservice2 =
-          restTemplate.getForObject(microservice2Endpoint + "/microservice2/test", String.class);
-
-    } catch (RestClientException e) {
-
-      log.error(e.getMessage());
-      messageFromMicroservice2 = "FAILED!!";
+    public TestController(MeterRegistry registry)
+    {
+        visitCounter = Counter.builder("visit_counter")
+                              .description("Number of visits to the site")
+                              .register(registry);
     }
 
-    return new ResponseEntity<>(
-        greeting
-            + " : "
-            + envName
-            + " (ms2 = "
-            + microservice2Endpoint
-            + ", "
-            + messageFromMicroservice2
-            + ")",
-        HttpStatus.OK);
-  }
+    @GetMapping
+    public ResponseEntity<String> test()
+    {
 
-  @GetMapping("/hello")
-  public ResponseEntity<String> hello() {
-    log.debug("Saying hello");
+        String messageFromMicroservice2 = null;
 
-    return ResponseEntity.ok("Hello from microservice1");
-  }
+        log.debug("Testing out Microservice1");
+
+        visitCounter.increment();
+
+        try
+        {
+
+            log.debug("Connecting to : " + messageFromMicroservice2);
+
+            messageFromMicroservice2 =
+                    restTemplate.getForObject(microservice2Endpoint + "/microservice2/test", String.class);
+
+        }
+        catch (RestClientException e)
+        {
+
+            log.error(e.getMessage());
+            messageFromMicroservice2 = "FAILED!!";
+        }
+
+        return new ResponseEntity<>(
+                greeting
+                        + " : "
+                        + envName
+                        + " (ms2 = "
+                        + microservice2Endpoint
+                        + ", "
+                        + messageFromMicroservice2
+                        + ")",
+                HttpStatus.OK);
+    }
+
+    @GetMapping("/hello")
+    public ResponseEntity<String> hello()
+    {
+        log.debug("Saying hello");
+
+        visitCounter.increment();
+
+        return ResponseEntity.ok("Hello from microservice1");
+    }
 }

@@ -5,6 +5,15 @@ spring:
     include:
       endpoints
 
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, metrics, prometheus
+  metrics:
+    tags:
+      application: ${spring.application.name}
+
 sjd:
   greeting: Greetings
   env-name: steve

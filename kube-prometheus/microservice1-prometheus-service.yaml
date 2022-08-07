@@ -1,0 +1,13 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: microservice1-service-monitor
+  labels:
+    release: prometheus
+spec:
+  selector:
+    matchLabels:
+      run: microservice1
+  endpoints:
+    - port: prometheus
+      path: "/microservice1/actuator/prometheus"
