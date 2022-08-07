@@ -9,5 +9,5 @@ spec:
     matchLabels:
       run: microservice2
   endpoints:
-    - port: prometheus
+    - port: http
       path: "/microservice2/actuator/prometheus"
